@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'SmartCoat — Infinite Paint Wall',
+  description: 'Explore the SmartCoat paint colour system through an infinite interactive colour wall.',
   generator: 'v0.app',
   icons: {
     icon: [

@@ -159,5 +159,45 @@
   }
   body {
     @apply bg-background text-foreground;
+    min-width: 320px;
   }
 }
+
+:root { --ink: #151515; --hairline: #e6e6e3; --ease-out: cubic-bezier(0.22, 1, 0.36, 1); }
+* { box-sizing: border-box; }
+button { font: inherit; }
+.smartcoat-shell { min-height: 100vh; overflow: hidden; background: #fff; color: var(--ink); }
+.smartcoat-header { height: 88px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-bottom: 1px solid var(--hairline); }
+.brand-overline, .selection-label, .system-label, .wall-intro, .wall-footer { font-size: 10px; letter-spacing: .16em; font-weight: 600; }
+.brand-overline { display: block; color: #858585; margin-bottom: 5px; }
+.brand-name { font-size: 18px; font-weight: 700; letter-spacing: -.04em; }
+.brand-name span { font-size: 9px; vertical-align: top; margin-left: 2px; }
+.system-label { color: #686868; display: flex; align-items: center; gap: 10px; }
+.live-dot { width: 6px; height: 6px; background: #39a36b; border-radius: 50%; }
+.selection-bar { min-height: 104px; display: flex; align-items: center; gap: 16px; padding: 18px 30px; border-bottom: 1px solid var(--hairline); }
+.selection-swatch { width: 54px; height: 54px; flex: 0 0 auto; border: 1px solid #0002; }
+.selection-copy { display: flex; flex-direction: column; gap: 4px; min-width: 210px; }
+.selection-label { color: #969696; font-size: 9px; }
+.selection-copy strong { font-size: 19px; font-weight: 500; letter-spacing: -.03em; }
+.selection-meta { display: flex; gap: 14px; color: #838383; font-size: 11px; }
+.selection-meta code { color: var(--ink); font-size: 11px; }
+.use-colour { margin-left: auto; border: 1px solid var(--ink); color: #fff; background: var(--ink); padding: 12px 16px; font-size: 10px; letter-spacing: .12em; font-weight: 700; cursor: pointer; transition: transform 160ms var(--ease-out), background 160ms var(--ease-out); }
+.use-colour:hover { background: #333; }
+.use-colour:active { transform: scale(.96); }
+.use-colour.accepted { background: #3a8d62; border-color: #3a8d62; display: flex; align-items: center; gap: 8px; }
+.wall-intro { height: 38px; padding: 0 30px; display: flex; align-items: center; justify-content: space-between; color: #999; }
+.wall-intro span:last-child { display: flex; gap: 7px; align-items: center; }
+.paint-wall { display: flex; flex-direction: column; gap: 4px; padding-bottom: 28px; }
+.paint-row { height: clamp(64px, 7vw, 96px); overflow: hidden; touch-action: pan-y; cursor: grab; }
+.paint-row:active { cursor: grabbing; }
+.paint-track { display: flex; gap: 4px; height: 100%; width: max-content; will-change: transform; }
+.paint-tile { position: relative; flex: 0 0 clamp(64px, 7vw, 96px); height: 100%; border: 0; border-radius: 0; padding: 0; cursor: pointer; transition: transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out); }
+.paint-tile:hover { z-index: 2; transform: scale(1.035); box-shadow: 0 7px 18px #0002; }
+.paint-tile.is-selected { z-index: 1; outline: 2px solid #fff; outline-offset: -5px; box-shadow: inset 0 0 0 1px #111; }
+.tile-tooltip { position: absolute; z-index: 4; left: 8px; bottom: 8px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 6px 7px; background: #fff; color: var(--ink); white-space: nowrap; box-shadow: 0 4px 16px #0002; text-align: left; }
+.tile-tooltip strong { font-size: 10px; font-weight: 600; }
+.tile-tooltip small { font-size: 9px; color: #777; }
+.wall-footer { display: flex; justify-content: space-between; padding: 18px 30px 34px; color: #999; border-top: 1px solid var(--hairline); }
+.wall-footer span:last-child { display: flex; gap: 6px; align-items: center; }
+@media (max-width: 600px) { .smartcoat-header { height: 72px; padding: 0 16px; } .system-label { font-size: 0; } .system-label .live-dot { display: block; } .selection-bar { padding: 14px 16px; gap: 10px; } .selection-swatch { width: 42px; height: 42px; } .selection-copy { min-width: 0; } .selection-copy strong { font-size: 16px; } .selection-meta { gap: 8px; font-size: 10px; } .use-colour { padding: 10px; font-size: 9px; } .wall-intro { padding: 0 16px; } .wall-footer { padding-left: 16px; padding-right: 16px; font-size: 8px; } }
+@media (prefers-reduced-motion: reduce) { .paint-tile, .use-colour { transition: none; } }
