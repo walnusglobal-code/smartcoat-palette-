@@ -100,6 +100,10 @@ function PaintRow({ rowIndex, onSelect, selectedId }: RowProps) {
 
 export function SmartCoatPaintWall() {
   const [selected, setSelected] = useState<PaintColour>(initialColour)
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => undefined)
+  }, [])
   const [accepted, setAccepted] = useState(false)
   const audioContext = useRef<AudioContext | null>(null)
   const select = (colour: PaintColour) => {
