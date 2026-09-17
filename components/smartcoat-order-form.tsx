@@ -1,0 +1,39 @@
+'use client'
+
+import { FormEvent, useMemo, useState } from 'react'
+import { ArrowRight, Check, ChevronLeft, ChevronRight, LoaderCircle, MapPin, PackageCheck, Sparkles } from 'lucide-react'
+import { initialColour, paintColours, type PaintColour } from '@/lib/paint-colours'
+
+type FormState = { customerName: string; email: string; phone: string; deliveryAddress: string; city: string; postcode: string; projectType: string; finish: string; quantityLitres: string; notes: string }
+const initialForm: FormState = { customerName: '', email: '', phone: '', deliveryAddress: '', city: '', postcode: '', projectType: 'interior', finish: 'unsure', quantityLitres: '10', notes: '' }
+const steps = ['Colour', 'Project', 'Delivery']
+
+export function SmartCoatOrderForm() {
+  const [step, setStep] = useState(0)
+  const [colour, setColour] = useState<PaintColour>(initialColour)
+  const [form, setForm] = useState(initialForm)
+  const [status, setStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState('')
+  const visibleColours = useMemo(() => paintColours.slice(0, 24), [])
+  const update = (key: keyof FormState, value: string) => setForm((current) => ({ ...current, [key]: value }))
+  const canContinue = step === 0 ? Boolean(colour.id) : step === 1 ? Boolean(form.projectType && form.finish && Number(form.quantityLitres) > 0) : Boolean(form.customerName.trim() && form.email.trim() && form.deliveryAddress.trim() && form.city.trim() && form.postcode.trim())
+  const next = () => { if (canContinue) setStep((current) => Math.min(2, current + 1)) }
+  const back = () => setStep((current) => Math.max(0, current - 1))
+  const submit = async (event: FormEvent) => {
+    event.preventDefault()
+    if (!canContinue) return
+    setStatus('saving'); setMessage('')
+    const response = await fetch('/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...form, quantityLitres: Number(form.quantityLitres), paintId: colour.id }) })
+    const result = await response.json()
+    if (!response.ok) { setStatus('error'); setMessage(result.error ?? 'Something went wrong.'); return }
+    setStatus('success'); setMessage(result.orderNumber)
+  }
+
+  if (status === 'success') return <section className="order-shell" id="order"><div className="order-success"><div className="success-icon"><Check size={22} /></div><span className="section-eyebrow">ORDER RECEIVED</span><h2>We&apos;ll take it from here.</h2><p>Your request <strong>{message}</strong> is safely with our team. We&apos;ll be in touch shortly to confirm the final details.</p><button type="button" className="order-secondary" onClick={() => { setStatus('idle'); setStep(0); setForm(initialForm) }}>START ANOTHER ORDER</button></div></section>
+
+  return <section className="order-shell" id="order" aria-labelledby="order-title"><div className="order-heading"><div><span className="section-eyebrow">03 / CUSTOM ORDER</span><h2 id="order-title">Make it yours.</h2><p>Tell us what you&apos;re painting. We&apos;ll help with the rest.</p></div><div className="order-note"><Sparkles size={16} /> Friendly help, from colour to delivery.</div></div><div className="order-progress" aria-label="Order progress">{steps.map((label, index) => <div key={label} className={`progress-step${index === step ? ' active' : ''}${index < step ? ' complete' : ''}`}><span>{index < step ? <Check size={12} /> : `0${index + 1}`}</span>{label}</div>)}</div><form onSubmit={submit}><div className="order-card">
+    {step === 0 && <div className="order-step"><div className="step-copy"><span className="step-number">STEP 1</span><h3>Choose your colour</h3><p>Start with a shade that feels right. You can change it anytime.</p></div><div className="order-colour-choice"><div className="chosen-colour"><div className="chosen-colour-swatch" style={{ backgroundColor: colour.hex }} /><div><span>YOUR COLOUR</span><strong>{colour.name}</strong><small>{colour.hex} · RGB {colour.rgb}</small></div></div><div className="mini-palette">{visibleColours.map((item) => <button key={item.id} type="button" aria-label={`Choose ${item.name}`} className={item.id === colour.id ? 'selected' : ''} style={{ backgroundColor: item.hex }} onClick={() => setColour(item)} />)}</div></div></div>}
+    {step === 1 && <div className="order-step"><div className="step-copy"><span className="step-number">STEP 2</span><h3>Tell us about the job</h3><p>A few simple details help us recommend the right finish and amount.</p></div><div className="field-grid"><label>What are you painting?<select value={form.projectType} onChange={(event) => update('projectType', event.target.value)}><option value="interior">Inside my home</option><option value="exterior">Outside my home</option><option value="commercial">A work or business space</option><option value="other">Something else</option></select></label><label>Which finish feels right?<select value={form.finish} onChange={(event) => update('finish', event.target.value)}><option value="unsure">I&apos;m not sure yet</option><option value="matt">Soft matt</option><option value="eggshell">Easy-clean eggshell</option><option value="satin">Smooth satin</option><option value="gloss">Shiny gloss</option></select></label><label className="field-wide">How much paint do you need? <span>(litres)</span><input type="number" min="1" max="10000" step="0.5" value={form.quantityLitres} onChange={(event) => update('quantityLitres', event.target.value)} /></label><label className="field-wide">Anything you&apos;d like us to know? <span>(optional)</span><textarea rows={4} value={form.notes} onChange={(event) => update('notes', event.target.value)} placeholder="For example: a nursery, a damp wall, or a tight deadline" /></label></div></div>}
+    {step === 2 && <div className="order-step"><div className="step-copy"><span className="step-number">STEP 3</span><h3>Where should we send it?</h3><p>Leave your details and we&apos;ll confirm everything before anything is final.</p></div><div className="field-grid"><label>Your name<input required value={form.customerName} onChange={(event) => update('customerName', event.target.value)} placeholder="Jane Smith" /></label><label>Email address<input required type="email" value={form.email} onChange={(event) => update('email', event.target.value)} placeholder="jane@example.com" /></label><label>Phone number <span>(optional)</span><input value={form.phone} onChange={(event) => update('phone', event.target.value)} placeholder="07123 456 789" /></label><label>Town / city<input required value={form.city} onChange={(event) => update('city', event.target.value)} placeholder="London" /></label><label className="field-wide">Delivery address<input required value={form.deliveryAddress} onChange={(event) => update('deliveryAddress', event.target.value)} placeholder="12 Green Street" /></label><label>Postcode<input required value={form.postcode} onChange={(event) => update('postcode', event.target.value)} placeholder="SW1A 1AA" /></label></div></div>}
+  </div><div className="order-actions">{step > 0 ? <button type="button" className="order-secondary" onClick={back}><ChevronLeft size={15} /> BACK</button> : <span />}{step < 2 ? <button type="button" className="order-primary" disabled={!canContinue} onClick={next}>NEXT STEP <ChevronRight size={15} /></button> : <button type="submit" className="order-primary" disabled={!canContinue || status === 'saving'}>{status === 'saving' ? <><LoaderCircle className="spin" size={15} /> SAVING</> : <>SEND MY REQUEST <ArrowRight size={15} /></>}</button>}</div>{status === 'error' && <p className="order-error" role="alert">{message}</p>}</form><div className="order-reassurance"><MapPin size={15} /><span>No payment today. We&apos;ll confirm the price and delivery with you first.</span><PackageCheck size={15} /><span>Most requests receive a reply within one working day.</span></div></section>
+}

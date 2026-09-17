@@ -241,3 +241,54 @@ button { font: inherit; }
 .agent-form button:disabled { opacity: .45; cursor: not-allowed; }
 @media (min-width: 768px) { .agent-panel { padding-inline: 30px; } }
 @media (max-width: 600px) { .agent-heading { display: block; } .agent-badge { display: inline-flex; margin-top: 20px; } .agent-thread { padding: 14px; } .agent-form { display: grid; gap: 8px; } .agent-form input { border-right: 1px solid #d8d8d1; } .agent-form button { min-height: 44px; justify-content: center; } }
+.order-shell { max-width: 1180px; margin: 0 auto; padding: 70px 16px 72px; background: #f5f5f1; }
+.order-heading { display: flex; justify-content: space-between; gap: 30px; align-items: flex-start; }
+.order-heading h2 { margin: 10px 0 8px; font-size: clamp(38px, 7vw, 68px); line-height: .95; letter-spacing: -.07em; font-weight: 500; }
+.order-heading p { margin: 0; color: #72726b; font-size: 15px; }
+.order-note { display: flex; align-items: center; gap: 8px; padding: 11px 13px; border: 1px solid #dcdcd4; color: #657c6d; font-size: 11px; white-space: nowrap; }
+.order-progress { display: flex; gap: 28px; margin: 38px 0 12px; border-bottom: 1px solid #deded7; }
+.progress-step { display: flex; align-items: center; gap: 8px; padding: 0 0 12px; color: #9a9a92; font-size: 10px; font-weight: 700; letter-spacing: .12em; border-bottom: 2px solid transparent; }
+.progress-step span { display: grid; place-items: center; width: 21px; height: 21px; border: 1px solid #d0d0c9; font-size: 9px; letter-spacing: 0; }
+.progress-step.active { color: #1f1f1c; border-color: #1f1f1c; }
+.progress-step.active span { border-color: #1f1f1c; }
+.progress-step.complete { color: #5d806b; }
+.progress-step.complete span { background: #5d806b; border-color: #5d806b; color: #fff; }
+.order-card { background: #fff; border: 1px solid #e3e3dc; }
+.order-step { display: grid; grid-template-columns: minmax(210px, .7fr) minmax(0, 1.3fr); gap: 48px; padding: clamp(24px, 5vw, 54px); min-height: 390px; }
+.step-number { color: #999990; font-size: 9px; letter-spacing: .16em; font-weight: 700; }
+.step-copy h3 { margin: 12px 0 9px; font-size: 25px; font-weight: 500; letter-spacing: -.04em; }
+.step-copy p { max-width: 260px; margin: 0; color: #77776f; line-height: 1.55; font-size: 13px; }
+.chosen-colour { display: flex; align-items: center; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid #e6e6df; }
+.chosen-colour-swatch { width: 76px; height: 76px; border: 1px solid #0002; flex: 0 0 auto; }
+.chosen-colour span, .chosen-colour small { display: block; color: #92928a; font-size: 9px; letter-spacing: .14em; }
+.chosen-colour strong { display: block; margin: 7px 0 5px; font-size: 18px; font-weight: 500; }
+.chosen-colour small { letter-spacing: 0; font-size: 11px; }
+.mini-palette { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; margin-top: 24px; }
+.mini-palette button { aspect-ratio: 1; border: 0; cursor: pointer; transition: transform 160ms var(--ease-out); }
+.mini-palette button:hover { transform: scale(1.12); z-index: 1; }
+.mini-palette button.selected { outline: 2px solid #1b1b18; outline-offset: 3px; }
+.field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
+.field-grid label { display: grid; gap: 7px; color: #3d3d38; font-size: 11px; font-weight: 600; }
+.field-grid label span { color: #999990; font-weight: 400; }
+.field-grid input, .field-grid select, .field-grid textarea { width: 100%; border: 1px solid #d7d7d0; border-radius: 0; background: #fcfcfa; color: #22221f; padding: 13px 12px; outline: none; font: inherit; font-size: 13px; }
+.field-grid input:focus, .field-grid select:focus, .field-grid textarea:focus { border-color: #617868; box-shadow: 0 0 0 2px #61786822; }
+.field-grid textarea { resize: vertical; }
+.field-wide { grid-column: 1 / -1; }
+.order-actions { display: flex; justify-content: space-between; gap: 12px; padding: 18px 0 0; }
+.order-primary, .order-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 16px; border: 1px solid #191916; font-size: 10px; font-weight: 700; letter-spacing: .12em; cursor: pointer; text-decoration: none; }
+.order-primary { background: #191916; color: #fff; }
+.order-primary:disabled { opacity: .38; cursor: not-allowed; }
+.order-secondary { background: transparent; color: #262622; border-color: #d3d3cb; }
+.order-error { margin: 12px 0 0; color: #a1453d; font-size: 12px; }
+.order-reassurance { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 24px; color: #7c7c74; font-size: 11px; }
+.order-reassurance svg:nth-of-type(2) { margin-left: 16px; }
+.order-success { min-height: 420px; display: grid; place-content: center; justify-items: center; text-align: center; background: #fff; border: 1px solid #e3e3dc; padding: 40px 20px; }
+.success-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: #5d806b; color: #fff; margin-bottom: 20px; }
+.order-success h2 { margin: 12px 0 10px; font-size: clamp(34px, 6vw, 54px); letter-spacing: -.06em; font-weight: 500; }
+.order-success p { max-width: 430px; color: #71716a; font-size: 14px; line-height: 1.6; }
+.order-success strong { color: #242420; }
+.spin { animation: spin 900ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (min-width: 768px) { .order-shell { padding-inline: 30px; } }
+@media (max-width: 650px) { .order-heading { display: block; } .order-note { display: inline-flex; margin-top: 22px; } .order-progress { gap: 13px; justify-content: space-between; } .progress-step { font-size: 8px; gap: 5px; letter-spacing: .08em; } .order-step { grid-template-columns: 1fr; gap: 28px; padding: 24px 18px 30px; } .field-grid { grid-template-columns: 1fr; } .field-wide { grid-column: auto; } .mini-palette { grid-template-columns: repeat(8, 1fr); gap: 4px; } .order-actions { padding-top: 14px; } .order-primary, .order-secondary { min-height: 46px; flex: 1; } .order-reassurance { display: grid; grid-template-columns: auto 1fr; } .order-reassurance svg:nth-of-type(2) { margin-left: 0; } }
+@media (prefers-reduced-motion: reduce) { .mini-palette button, .spin { animation: none; transition: none; } }

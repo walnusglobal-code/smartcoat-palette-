@@ -49,6 +49,12 @@
       "skillPath": "config/skills/eval-engineering/SKILL.md",
       "computedHash": "c0c88a41e1e1bb9bccc01dac78efa6e34538cbad3f6a60a1226fef8a611ebac3"
     },
+    "high-end-visual-design": {
+      "source": "leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/soft-skill/SKILL.md",
+      "computedHash": "7db385e4c5370e5a7fca9704a1361b056e4504ea6a03924bb86f33a4f00b5c73"
+    },
     "langchain-dependencies": {
       "source": "langchain-ai/langchain-skills",
       "sourceType": "github",
@@ -133,6 +139,12 @@
       "skillPath": "config/skills/managed-deep-agents/SKILL.md",
       "computedHash": "20734cdcb22c5bda57b8010f0394d230cda4c7ea23db1e3a42951a2f1c6a100d"
     },
+    "sleek-design-mobile-apps": {
+      "source": "sleekdotdesign/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/design-mobile-apps/SKILL.md",
+      "computedHash": "1e7a933ac86d075fb82d28067bb5f6c148b480028f726a1906f4ecb9d55717a5"
+    },
     "subagent-driven-development": {
       "source": "obra/superpowers",
       "sourceType": "github",
@@ -162,6 +174,18 @@
       "sourceType": "github",
       "skillPath": ".agents/skills/textual-screenshot/SKILL.md",
       "computedHash": "63f9213ff390c1df28cee88e41adce6b80b0a8b42b9ac72937b64882b5cb867a"
+    },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "4080ff883b26b670a5a224fb332e89ecc15319535f4d14279947ad7812fec558"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
     }
   }
 }
