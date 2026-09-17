@@ -176,7 +176,8 @@ button { font: inherit; }
 .brand-name span { font-size: 9px; vertical-align: top; margin-left: 2px; }
 .system-label { color: #686868; display: flex; align-items: center; gap: 10px; }
 .live-dot { width: 6px; height: 6px; background: #39a36b; border-radius: 50%; }
-.selection-bar { min-height: 104px; display: flex; align-items: center; gap: 16px; padding: 18px 30px; border-bottom: 1px solid var(--hairline); }
+.selection-bar { min-height: 104px; display: flex; align-items: center; gap: 16px; padding: 18px 16px; border-top: 1px solid var(--hairline); background: #fff; }
+@media (min-width: 768px) { .selection-bar { padding-inline: 30px; } }
 .selection-swatch { width: 54px; height: 54px; flex: 0 0 auto; border: 1px solid #0002; }
 .selection-copy { display: flex; flex-direction: column; gap: 4px; min-width: 210px; }
 .selection-label { color: #969696; font-size: 9px; }
