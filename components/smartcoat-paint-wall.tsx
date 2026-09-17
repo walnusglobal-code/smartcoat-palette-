@@ -5,8 +5,10 @@ import { Check, Copy, MoveHorizontal } from 'lucide-react'
 import { initialColour, paintColours, type PaintColour } from '@/lib/paint-colours'
 
 const ROW_COUNT = 24
-const VISIBLE_TILES = 18
-const TILE_STEP = 96
+const VISIBLE_TILES = 24
+const TILE_SIZE = 32
+const TILE_GAP = 0.2
+const TILE_STEP = TILE_SIZE + TILE_GAP
 
 type RowProps = { rowIndex: number; onSelect: (colour: PaintColour) => void; selectedId: string }
 
@@ -29,9 +31,15 @@ function PaintRow({ rowIndex, onSelect, selectedId }: RowProps) {
 
   useEffect(() => {
     let frame = 0
-    const tick = () => { render(); frame = requestAnimationFrame(tick) }
+    let active = true
+    const tick = () => {
+      if (active) render()
+      frame = requestAnimationFrame(tick)
+    }
+    const observer = new IntersectionObserver(([entry]) => { active = entry.isIntersecting })
+    if (viewportRef.current) observer.observe(viewportRef.current)
     frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
+    return () => { observer.disconnect(); cancelAnimationFrame(frame) }
   }, [render])
 
   const pointerDown = (event: React.PointerEvent) => {
@@ -77,7 +85,26 @@ function PaintRow({ rowIndex, onSelect, selectedId }: RowProps) {
 export function SmartCoatPaintWall() {
   const [selected, setSelected] = useState<PaintColour>(initialColour)
   const [accepted, setAccepted] = useState(false)
-  const select = (colour: PaintColour) => { setSelected(colour); setAccepted(false) }
+  const audioContext = useRef<AudioContext | null>(null)
+  const select = (colour: PaintColour) => {
+    setSelected(colour)
+    setAccepted(false)
+    const AudioContextConstructor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+    if (!AudioContextConstructor) return
+    const context = audioContext.current ?? new AudioContextConstructor()
+    audioContext.current = context
+    const oscillator = context.createOscillator()
+    const gain = context.createGain()
+    oscillator.type = 'sine'
+    oscillator.frequency.setValueAtTime(420, context.currentTime)
+    oscillator.frequency.exponentialRampToValueAtTime(720, context.currentTime + 0.08)
+    gain.gain.setValueAtTime(0.0001, context.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.045, context.currentTime + 0.012)
+    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.14)
+    oscillator.connect(gain).connect(context.destination)
+    oscillator.start()
+    oscillator.stop(context.currentTime + 0.15)
+  }
   return <main className="smartcoat-shell">
     <header className="smartcoat-header"><div><span className="brand-overline">WALNUS GLOBAL</span><span className="brand-name">SMARTCOAT<span>™</span></span></div><div className="system-label">PAINT COLOUR SYSTEM <span className="live-dot" aria-hidden="true" /></div></header>
     <section className="selection-bar" aria-live="polite"><div className="selection-swatch" style={{ backgroundColor: selected.hex }} /><div className="selection-copy"><span className="selection-label">SELECTED COLOUR</span><strong>{selected.name}</strong><span className="selection-meta"><code>{selected.hex}</code><span>RGB {selected.rgb}</span></span></div><button type="button" className={`use-colour${accepted ? ' accepted' : ''}`} onClick={() => setAccepted(true)}>{accepted ? <><Check size={14} /> COLOUR ADDED TO PROJECT</> : <>USE COLOUR <span>↗</span></>}</button></section>
