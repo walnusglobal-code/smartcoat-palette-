@@ -6,6 +6,9 @@ import { initialColour, paintColours, type PaintColour } from '@/lib/paint-colou
 
 const ROW_COUNT = 24
 const VISIBLE_TILES = 24
+
+const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/img-PCTaNFgod6Ni2ANqzwR96w7fhOUUUR.webp'
+const HERO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/f25096eee1e284a248eb1a1038d60246-FVyw9Cdi7qAyHBuGEOyo9M0Do7hyl6.jpg'
 const TILE_SIZE = 32
 const TILE_GAP = 0.2
 const TILE_STEP = TILE_SIZE + TILE_GAP
@@ -106,9 +109,10 @@ export function SmartCoatPaintWall() {
     oscillator.stop(context.currentTime + 0.15)
   }
   return <main className="smartcoat-shell">
-    <header className="smartcoat-header"><div><span className="brand-overline">WALNUS GLOBAL</span><span className="brand-name">SMARTCOAT<span>™</span></span></div><div className="system-label">PAINT COLOUR SYSTEM <span className="live-dot" aria-hidden="true" /></div></header>
+    <header className="smartcoat-header"><a className="brand-lockup" href="#top" aria-label="SmartCoat home"><img src={LOGO_URL} alt="Walnus Global SmartCoat seal" className="brand-logo" /><span><span className="brand-overline">WALNUS GLOBAL</span><span className="brand-name">SMARTCOAT<span>™</span></span></span></a><div className="system-label">PAINT COLOUR SYSTEM <span className="live-dot" aria-hidden="true" /></div></header>
+    <section className="hero-banner" id="top" aria-label="SmartCoat professional paint collection"><img src={HERO_URL} alt="Vivid teal, ivory, black, amber and magenta paint strokes flowing across a dark surface" className="hero-image" /><div className="hero-overlay" /><div className="hero-copy"><span className="hero-kicker">WALNUS GLOBAL / SMARTCOAT</span><h1>Colour with<br /><em>character.</em></h1><p>Professional finishes for spaces that make an impression.</p><a href="#colour-wall" className="hero-cta">EXPLORE THE PALETTE <span>↓</span></a></div></section>
     <section className="selection-bar" aria-live="polite"><div className="selection-swatch" style={{ backgroundColor: selected.hex }} /><div className="selection-copy"><span className="selection-label">SELECTED COLOUR</span><strong>{selected.name}</strong><span className="selection-meta"><code>{selected.hex}</code><span>RGB {selected.rgb}</span></span></div><button type="button" className={`use-colour${accepted ? ' accepted' : ''}`} onClick={() => setAccepted(true)}>{accepted ? <><Check size={14} /> COLOUR ADDED TO PROJECT</> : <>USE COLOUR <span>↗</span></>}</button></section>
-    <div className="wall-intro"><span>01—24 / SPECTRUM LIBRARY</span><span><MoveHorizontal size={14} /> DRAG ROWS TO EXPLORE</span></div>
+    <div className="wall-intro" id="colour-wall"><span>01—24 / SPECTRUM LIBRARY</span><span><MoveHorizontal size={14} /> DRAG ROWS TO EXPLORE</span></div>
     <section className="paint-wall" aria-label="Infinite SmartCoat paint colour wall">{Array.from({ length: ROW_COUNT }, (_, index) => <PaintRow key={index} rowIndex={index} onSelect={select} selectedId={selected.id} />)}</section>
     <footer className="wall-footer"><span>SMARTCOAT™ / MASTER PAINT DATABASE PREVIEW</span><span><Copy size={13} /> 152 COLOURS IN SYSTEM</span></footer>
   </main>
