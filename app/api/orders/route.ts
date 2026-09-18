@@ -14,6 +14,16 @@ function text(value: unknown, max: number) {
   return typeof value === 'string' ? value.trim().slice(0, max) : ''
 }
 
+export async function GET() {
+  try {
+    const { data, error } = await admin.from('customer_orders').select('order_number,customer_name,project_type,quantity_litres,status,created_at').order('created_at', { ascending: false }).limit(100)
+    if (error) return NextResponse.json({ error: 'Could not load orders.' }, { status: 500 })
+    return NextResponse.json(data ?? [])
+  } catch {
+    return NextResponse.json({ error: 'Could not load orders.' }, { status: 500 })
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
