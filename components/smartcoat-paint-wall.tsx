@@ -98,7 +98,7 @@ function PaintRow({ rowIndex, onSelect, selectedId }: RowProps) {
   )
 }
 
-export function SmartCoatPaintWall() {
+export function SmartCoatPaintWall({ onColourChange }: { onColourChange?: (colour: PaintColour) => void }) {
   const [selected, setSelected] = useState<PaintColour>(initialColour)
 
   useEffect(() => {
@@ -108,6 +108,7 @@ export function SmartCoatPaintWall() {
   const audioContext = useRef<AudioContext | null>(null)
   const select = (colour: PaintColour) => {
     setSelected(colour)
+    onColourChange?.(colour)
     setAccepted(false)
     const AudioContextConstructor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
     if (!AudioContextConstructor) return
