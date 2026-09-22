@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const admin = createClient(process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { autoRefreshToken: false, persistSession: false } })
+function getAdmin() {
+  const url = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) throw new Error('Supabase server configuration is unavailable.')
+  return createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } })
+}
 const allowedProjects = new Set(['interior', 'exterior', 'commercial', 'other', 'House', 'Apartment', 'Office', 'Shop', 'School', 'Hotel', 'Factory', 'Warehouse', 'Commercial Building', 'Other'])
 const allowedFinishes = new Set(['matt', 'eggshell', 'satin', 'gloss', 'unsure', 'Interior', 'Exterior', 'Both'])
 function text(value: unknown, max: number) { return typeof value === 'string' ? value.trim().slice(0, max) : '' }
@@ -10,6 +15,7 @@ function legacyFinish(value: string) { return ['matt', 'eggshell', 'satin', 'glo
 
 export async function GET() {
   try {
+    const admin = getAdmin()
     const { data, error } = await admin.from('customer_orders').select('order_number,customer_name,project_type,quantity_litres,status,created_at').order('created_at', { ascending: false }).limit(100)
     if (error) return NextResponse.json({ error: 'Could not load orders.' }, { status: 500 })
     return NextResponse.json(data ?? [])
@@ -32,6 +38,7 @@ export async function POST(request: Request) {
     const paintId = text(body.paintId, 120)
     if (customerName.length < 2 || !/^\S+@\S+\.\S+$/.test(email) || deliveryAddress.length < 4 || city.length < 2 || !allowedProjects.has(projectType) || !allowedFinishes.has(finish) || !Number.isFinite(quantityLitres) || quantityLitres <= 0 || quantityLitres > 10000 || !paintId) return NextResponse.json({ error: 'Please check the highlighted details and try again.' }, { status: 400 })
 
+    const admin = getAdmin()
     const { data: paint } = paintId === 'custom' ? { data: null } : await admin.from('paint_catalog').select('id,name,hex').eq('id', paintId).maybeSingle()
     if (paintId !== 'custom' && !paint) return NextResponse.json({ error: 'That paint is no longer available. Please choose another.' }, { status: 400 })
     const { data: order, error: orderError } = await admin.from('customer_orders').insert({ customer_name: customerName, email, phone: phone || null, delivery_address: deliveryAddress, city, postcode, project_type: legacyProject(projectType), finish: legacyFinish(finish), quantity_litres: quantityLitres, notes: notes || null }).select('id,order_number').single()
