@@ -54,3 +54,16 @@ button { cursor:pointer; }
 .summary-footer small { display:block; margin-top:4px; color:var(--muted); font-size:10px; }
 .order-primary:focus-visible,.market-title button:focus-visible { outline:2px solid var(--orange); outline-offset:3px; }
 @media (max-width:700px) { .market-card { margin-top:18px; } .market-row { gap:8px; } }
+.paint-selection-panel { position:relative; z-index:5; animation:fold-in 420ms cubic-bezier(.22,1,.36,1); }
+.category-chips { transition:transform .36s ease, opacity .36s ease; }
+.category-chips button { transition:transform .28s ease, background-color .28s ease, color .28s ease; }
+.category-chips button:active { transform:scale(.96) rotateX(7deg); }
+.paint-combobox { position:relative; margin-top:12px; }
+.paint-combobox-trigger { width:100%; display:flex; align-items:center; gap:12px; padding:15px; border:1px solid var(--line); background:#fff; color:var(--ink); text-align:left; box-shadow:0 8px 24px rgba(23,23,20,.04); }
+.paint-combobox-trigger > span:nth-child(2) { display:grid; gap:4px; flex:1; }.paint-combobox-trigger small { color:var(--muted); font:500 9px 'DM Mono',monospace; letter-spacing:.1em; }.paint-combobox-trigger strong { font-size:13px; }.paint-icon,.paint-option-icon { display:grid; place-items:center; width:32px; height:32px; color:var(--orange); background:#fff1ec; }
+.paint-combobox-menu { position:absolute; left:0; right:0; top:calc(100% + 7px); max-height:280px; overflow:auto; padding:6px; border:1px solid var(--line); background:#fff; box-shadow:0 18px 40px rgba(23,23,20,.14); z-index:10; transform-origin:top; animation:fold-in .24s cubic-bezier(.22,1,.36,1); }
+.paint-option { width:100%; display:flex; align-items:center; gap:10px; padding:10px; border:0; background:transparent; color:var(--ink); text-align:left; }.paint-option:hover,.paint-option.selected { background:#f1f0e9; }.paint-option > span:nth-child(2) { display:grid; gap:3px; flex:1; }.paint-option strong { font-size:11px; }.paint-option small { color:var(--muted); font-size:10px; }.paint-option-icon { width:28px; height:28px; background:#edf3f6; color:#397b8d; }.paint-menu-empty { padding:18px; margin:0; color:var(--muted); font-size:12px; }
+@keyframes fold-in { from { opacity:0; transform:perspective(700px) rotateX(-10deg) scaleY(.92); } to { opacity:1; transform:perspective(700px) rotateX(0) scaleY(1); } }
+.paint-tile { transform-origin:center bottom; }
+@media (prefers-reduced-motion:reduce) { .paint-selection-panel,.paint-combobox-menu { animation:none; } .paint-tile { transform:none !important; } }
+@media (max-width:700px) { .paint-combobox-menu { max-height:240px; } .paint-combobox-trigger { min-height:58px; } }

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, Copy, MoveHorizontal } from 'lucide-react'
+import { animate } from 'animejs'
 import { initialColour, paintColours, type PaintColour } from '@/lib/paint-colours'
 
 const ROW_COUNT = 12
@@ -106,6 +107,11 @@ export function SmartCoatPaintWall({ onColourChange }: { onColourChange?: (colou
   }, [])
   const [accepted, setAccepted] = useState(false)
   const audioContext = useRef<AudioContext | null>(null)
+  useEffect(() => {
+    const tiles = document.querySelectorAll('.paint-tile')
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    animate(tiles, { translateY: [0, -2, 0], duration: 2200, delay: (_el, index) => (index % 12) * 45, loop: true, alternate: true, ease: 'inOutSine' })
+  }, [])
   const select = (colour: PaintColour) => {
     setSelected(colour)
     onColourChange?.(colour)
